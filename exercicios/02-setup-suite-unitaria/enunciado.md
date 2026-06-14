@@ -1,18 +1,21 @@
-# Atividade 2 — Suíte Unitária sobre App RN (10 pts)
+# Atividade 2 — Suíte Unitária + Integração sobre App RN (15 pts)
 
 **Disciplina:** Testes de Aplicações Mobile
 **Entrega:** até **21/06/2026**
 **Modalidade:** individual
-**Tempo estimado:** **~1-2 horas**
+**Tempo estimado:** **~2-3 horas**
 **Dificuldade:** ⭐⭐ Médio — Jest/Node (sem simulador); escrever testes sobre código existente
+
+> **Duas partes:** **Parte A — Suíte Unitária (10 pts)** + **Parte B — Integração (5 pts)** = **15 pts**.
+> A Parte A cobre o Bloco 1 (funções puras, stores, RNTL com mock). A Parte B cobre o Bloco 2 (fluxo entre componentes: query + store + navegação).
 
 ---
 
 ## Por que essa atividade
 
-A Aula 3 cobriu **unit testing em React Native** (Jest + funções puras + `jest.mock` + RNTL). Aqui você exercita o core do QA: **escrever uma suíte de testes verde sobre código que já existe** — sem precisar implementar features.
+Na Aula 3 a gente **começa junto** os dois hands-on (Bloco 1 — unit; Bloco 2 — integração), montando os padrões no telão. **Esta atividade é o término deles, que você faz sozinho em casa** — o core do QA: escrever uma suíte de testes verde sobre código que já existe, sem implementar features.
 
-O app-alvo é o **mesmo app TMDB da disciplina de Arquitetura** (já implementado nesta versão). Você testa as camadas `store`, `utils` e `data`.
+O app-alvo é o **mesmo app TMDB da disciplina de Arquitetura** (já implementado). Na **Parte A** você testa as camadas `store`, `utils` e `data`; na **Parte B**, o fluxo de integração em `src/integration/` (lista + favoritos + navegação).
 
 ---
 
@@ -31,7 +34,7 @@ npm test     # posterUrl já passa verde (3 testes). O resto é seu.
 
 ---
 
-## Tarefa (escrever testes em `__tests__/`)
+## Parte A — Suíte Unitária (10 pts) · escrever testes em `__tests__/`
 
 O exercício já tem **1 exemplo resolvido** (`posterUrl.test.ts`) — use de modelo. Os outros arquivos têm `it.todo` marcando o que falta.
 
@@ -78,18 +81,37 @@ npm run test:coverage
 
 ---
 
+## Parte B — Integração (5 pts) · escrever testes em `__tests__/integration/`
+
+Aqui você testa **fluxo entre componentes** (Bloco 2): a lista busca dados (API mockada via TanStack Query) e favoritar um card reflete no contador do header. O alvo é a versão **já implementada** em `src/integration/` (`MovieListScreen`, `MovieCardFav`, `AppNavigator`) + o hook `src/hooks/useFavorites.ts`. Você só escreve os `it()` — **mock e wrapper já vêm prontos** no scaffold.
+
+> Por que uma versão separada em `src/integration/`? O `MovieList`/`MovieCard` da Parte A são stubs que você completaria implementando features. Pra focar em **teste de integração** (não em implementar app), a Parte B traz as telas prontas e conectadas.
+
+**Pontua só a entrega:** `__tests__/integration/movieFlow.integration.test.tsx` (3 cenários). Os outros dois arquivos são **prática** (não pontuam), mas faça-os primeiro — são o aquecimento.
+
+| Arquivo | O que cobrir | Pontua? |
+|---|---|---|
+| `useFavorites.test.ts` | `renderHook` — toggle isolado (count, isFavorite) | prática |
+| `navigation.test.tsx` | `AppNavigator` — tap no card → tela de detalhe | prática |
+| **`movieFlow.integration.test.tsx`** | lista aparece (2) · favoritar → `♥ 1` (2) · desfavoritar → `♥ 0` (1) | **5 pts** |
+
+> Pontos de teste expostos: `testID="favorites-count"` (header), `testID="movie-card-heart-1"` (botão favoritar). Use `findByText` (async) pra esperar a lista carregar e `toHaveTextContent` no contador.
+
+---
+
 ## Critérios de avaliação
 
 | Critério | Pontos |
 |---|---|
 | `npm install && npm test` roda em < 15min (eliminatório) | 2 |
-| Testes `favoritesStore` (6 verdes) | 2 |
-| **Teste de tela `MovieCard` (RNTL)** — render + press navega | 2 |
-| Testes `isTokenError` (5 verdes) | 2 |
-| Testes `counterStore` (3 verdes) | 1 |
-| Cobertura ≥ 70% em `src/store` e `src/utils` | 1 |
+| **Parte A** · Testes `favoritesStore` (6 verdes) | 2 |
+| **Parte A** · Teste de tela `MovieCard` (RNTL) — render + press navega | 2 |
+| **Parte A** · Testes `isTokenError` (5 verdes) | 2 |
+| **Parte A** · Testes `counterStore` (3 verdes) | 1 |
+| **Parte A** · Cobertura ≥ 70% em `src/store` e `src/utils` | 1 |
+| **Parte B** · `movieFlow.integration.test.tsx` — lista aparece + favoritar `♥ 1` + desfavoritar `♥ 0` | 5 |
 
-**Total: 10 pts**
+**Total: 15 pts** (Parte A: 10 · Parte B: 5)
 
 > 🎁 **Bônus** (arredondamento):
 > - `popularMovies.test.ts` — `fetchPopularMovies` com `jest.mock('@/services/api')` (+1)
@@ -120,7 +142,7 @@ npm run test:coverage
 
 - **Não implementa feature** — o código de produção já está pronto
 - **Não precisa rodar o app** (sem token/simulador) — testes (incl. RNTL) rodam só com Node
-- **Não precisa E2E** (app rodando ponta a ponta) — isso é a Aula 4 (Detox)
+- **Não precisa E2E** (app rodando ponta a ponta no device) — isso é a Aula 4 (Maestro)
 
 ## Material de apoio (todos no GitHub público)
 

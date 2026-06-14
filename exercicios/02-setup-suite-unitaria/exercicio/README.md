@@ -1,17 +1,18 @@
 # Exercício — Testes de Aplicações Mobile · Aula 3
 
-App Expo + TypeScript **já implementado e funcionando**. Mesmo app que a turma de Arquitetura constrói — aqui o foco é o oposto: **escrever a suíte de testes unitários** sobre código que já existe.
+App Expo + TypeScript **já implementado e funcionando**. Mesmo app que a turma de Arquitetura constrói — aqui o foco é o oposto: **escrever a suíte de testes** sobre código que já existe.
 
-> Hands-on da Aula 2 (escrevemos testes juntos) + Atividade 2 (entrega **11/06**, 10pts — você escreve a suíte e atinge cobertura ≥ 70%).
+> Os 2 hands-on da Aula 3 (Bloco 1 unit · Bloco 2 integração) começam **juntos em aula**. A **Atividade 2 (entrega 21/06, 15 pts)** é o término deles, que você faz em casa:
+> **Parte A — Suíte Unitária (10 pts)** + **Parte B — Integração (5 pts)**.
 
-**Você NÃO implementa features.** Stores, services e utils já estão prontos. Sua entrega são os testes em `__tests__/`.
+**Você NÃO implementa features.** Stores, services, utils e as telas de integração já estão prontos. Sua entrega são os testes em `__tests__/`.
 
 ---
 
 ## O que está pronto pra você testar
 
-| Arquivo | O que tem | Tipo de teste |
-|---|---|---|
+**Parte A (unit):**
+
 | Arquivo | O que tem | Tipo de teste |
 |---|---|---|
 | `src/components/MovieCard.tsx` | card de filme (título, nota, toque) | **teste de tela (RNTL)** ⭐ |
@@ -21,13 +22,24 @@ App Expo + TypeScript **já implementado e funcionando**. Mesmo app que a turma 
 | `src/utils/poster-url.ts` | `posterUrl(path, size)` — monta URL do poster | função pura (Jest) — modelo |
 | `src/queries/movies/get-popular-movies.ts` | `fetchPopularMovies(page)` | mock de dependência — **bônus** |
 
+**Parte B (integração)** — versão já conectada das telas:
+
+| Arquivo | O que tem | Tipo de teste |
+|---|---|---|
+| `src/hooks/useFavorites.ts` | hook sobre o store de favoritos | **renderHook** |
+| `src/integration/MovieListScreen.tsx` | lista (TanStack Query) + contador no header | **integração (RNTL)** ⭐ |
+| `src/integration/MovieCardFav.tsx` | card com favoritar (`testID`s) + navegação | integração (RNTL) |
+| `src/integration/AppNavigator.tsx` | NavigationContainer (Home + Detail) | integração (RNTL) |
+
 ```
 src/
-├── components/MovieCard.tsx  ← teste de tela (RNTL) ⭐
+├── components/MovieCard.tsx  ← Parte A: teste de tela (RNTL) ⭐
 ├── store/                    ← Zustand (favorites, counter)
 ├── services/api.ts           ← isTokenError
 ├── queries/movies/           ← TanStack Query (bônus)
-└── utils/poster-url.ts       ← função pura — modelo resolvido
+├── utils/poster-url.ts       ← função pura — modelo resolvido
+├── hooks/useFavorites.ts     ← Parte B: alvo do renderHook
+└── integration/              ← Parte B: telas conectadas (lista, card, navegação)
 
 __tests__/                    ← SUA ENTREGA (Jest + RNTL)
 ├── posterUrl.test.ts          ← EXEMPLO RESOLVIDO (modelo)
@@ -35,7 +47,11 @@ __tests__/                    ← SUA ENTREGA (Jest + RNTL)
 ├── favoritesStore.test.ts     ← it.todo
 ├── counterStore.test.ts       ← it.todo
 ├── api.test.ts                ← it.todo
-└── popularMovies.test.ts      ← it.todo — bônus (mock da api)
+├── popularMovies.test.ts      ← it.todo — bônus (mock da api)
+└── integration/              ← Parte B
+    ├── useFavorites.test.ts            ← it.todo — prática (renderHook)
+    ├── navigation.test.tsx             ← it.todo — prática (tap → Detail)
+    └── movieFlow.integration.test.tsx  ← it.todo — ENTREGA Parte B ⭐
 ```
 
 ---
@@ -66,6 +82,8 @@ npm run test:mutation  # mutation testing (Stryker) — RODE depois de resolver 
 
 ## Suas tasks
 
+**Parte A — Suíte Unitária (10 pts):**
+
 | # | Onde | O que fazer |
 |---|---|---|
 | TASK 1 | `__tests__/posterUrl.test.ts` | Leia — é o **modelo resolvido** |
@@ -75,6 +93,14 @@ npm run test:mutation  # mutation testing (Stryker) — RODE depois de resolver 
 | TASK 5 | `__tests__/counterStore.test.ts` | Escreva 3 testes (increment/decrement/reset) |
 | TASK 6 | — | Atinja **cobertura ≥ 70%** em `src/store` e `src/utils` |
 | TASK 7 (bônus) | `__tests__/popularMovies.test.ts` | `fetchPopularMovies` com `jest.mock('@/services/api')` |
+
+**Parte B — Integração (5 pts):** o setup (mock + wrapper) já vem pronto — você só escreve os `it()`.
+
+| # | Onde | O que fazer |
+|---|---|---|
+| TASK 8 (prática) | `__tests__/integration/useFavorites.test.ts` | `renderHook` — toggle isolado |
+| TASK 9 (prática) | `__tests__/integration/navigation.test.tsx` | `AppNavigator` — tap no card → Detail |
+| **TASK 10 ⭐ (entrega)** | `__tests__/integration/movieFlow.integration.test.tsx` | **lista aparece + favoritar `♥ 1` + desfavoritar `♥ 0`** |
 
 ```bash
 grep -rn "it.todo\|TODO \[TASK" __tests__/   # ver o que falta
