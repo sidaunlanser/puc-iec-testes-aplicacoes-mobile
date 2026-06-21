@@ -1,8 +1,13 @@
 # Flow 5 — Completar onboarding até a tela final
+# Usa conditional flow: só executa os passos se o onboarding estiver visível.
+# Assim o flow não falha quando o app pula o onboarding por já ter sido concluído.
 appId: com.apptestesmobile
 ---
 - launchApp
-# TODO: navegar/abrir o onboarding
-# TODO: tapOn { id: "onboarding-next-button" } pelas telas (repetir conforme necessário)
-# TODO: tapOn { id: "onboarding-finish-button" }
-# TODO: assertVisible da home após concluir o onboarding
+# Condicional: executa o fragmento só se o botão "Próximo" estiver na tela
+- runFlow:
+    when:
+      visible:
+        id: "onboarding-next-button"
+    file: ./_fragments/complete-onboarding.yaml
+# TODO: assertVisible da home após concluir (ex: home-category-functional)

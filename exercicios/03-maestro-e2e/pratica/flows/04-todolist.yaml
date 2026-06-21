@@ -1,8 +1,11 @@
 # Flow 4 — Adicionar item na todo list e verificar que aparece
+# Usa env para parametrizar o texto do item (padrão Maestro para dados reutilizáveis)
 appId: com.apptestesmobile
+env:
+  TODO_ITEM: "Comprar leite"
 ---
 - launchApp
 # TODO: navegar até a todo list
 # TODO: tapOn { id: "todolist-add-button" }
-# TODO: inputText do nome do item
-# TODO: assertVisible do item recém-adicionado (todolist-item-${id})
+- inputText: ${TODO_ITEM}         # env parametriza o texto — tente mudar o valor acima
+# TODO: assertVisible do item recém-adicionado (use o texto ou todolist-item-${id})
